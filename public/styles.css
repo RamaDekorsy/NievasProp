@@ -1,0 +1,161 @@
+body {
+  margin: 0;
+  font-family: sans-serif;
+}
+
+.header {
+  background-color: #43a125;
+  color: white;
+}
+
+.top-bar {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  justify-content: space-between;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  color: white;
+}
+
+.logo img {
+  height: 40px;
+  margin-right: 10px;
+}
+
+.logo span {
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.search-bar {
+  flex: 1;
+  max-width: 700px;
+  margin: 0 20px;
+  position: relative;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 12px 45px 12px 20px;
+  border-radius: 30px;
+  border: none;
+  font-size: 16px;
+}
+
+.search-bar i {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: gray;
+}
+
+.icons {
+  display: flex;
+  gap: 20px;
+}
+
+.icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 14px;
+}
+
+.icon i {
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+.nav-bar {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #3a9921;
+}
+
+.menu {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-weight: bold;
+  margin-right: 30px;
+}
+
+.menu i {
+  margin-right: 5px;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links li a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+}
+.footer {
+  background-color: #43a125;
+  color: black;
+  padding: 40px 20px;
+  font-family: sans-serif;
+}
+
+.footer-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 40px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.footer-logo {
+  flex: 1 1 200px;
+  text-align: center;
+}
+
+.footer-logo img {
+  width: 120px;
+  margin-bottom: 10px;
+}
+
+.footer-logo p {
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.footer-section {
+  flex: 1 1 200px;
+}
+
+.footer-section h3 {
+  font-size: 18px;
+  border-top: 2px solid black;
+  padding-top: 10px;
+  margin-bottom: 10px;
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-section li {
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
+.footer-section i {
+  margin-right: 8px;
+}
