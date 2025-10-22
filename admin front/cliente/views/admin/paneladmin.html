@@ -1,0 +1,397 @@
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Panel de Administrador - Sistema Inmobiliario</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+  />
+  <style>
+    body {
+      background-color: #000000;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+  <div id="loginPage" class="flex-grow flex items-center justify-center p-4">
+    <div class="w-full max-w-md bg-[#064e40] rounded-lg shadow-lg p-8">
+      <h1 class="text-3xl font-bold text-center text-[#7fffd4] mb-8">Panel de Administrador</h1>
+      <form id="loginForm" class="space-y-6">
+        <div>
+          <label for="username" class="block mb-2 text-[#7fffd4] font-semibold">Usuario</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            placeholder="Ingrese su usuario"
+            class="w-full px-4 py-2 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-[#7fffd4]"
+            required
+            autocomplete="username"
+          />
+        </div>
+        <div>
+          <label for="password" class="block mb-2 text-[#7fffd4] font-semibold">Contraseña</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Ingrese su contraseña"
+            class="w-full px-4 py-2 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-[#7fffd4]"
+            required
+            autocomplete="current-password"
+          />
+        </div>
+        <button
+          type="submit"
+          class="w-full bg-[#7fffd4] text-black font-bold py-3 rounded-md hover:bg-[#5cc9b1] transition-colors flex items-center justify-center"
+        >
+          <i class="fas fa-sign-in-alt mr-2"></i> Ingresar
+        </button>
+        <p id="errorMsg" class="text-red-500 text-center mt-4 hidden font-semibold"></p>
+      </form>
+    </div>
+  </div>
+
+  <div id="adminPanel" class="hidden flex flex-col min-h-screen bg-black text-[#7fffd4] p-6">
+    <header class="flex justify-between items-center mb-6 border-b border-[#064e40] pb-4">
+      <h2 class="text-2xl font-bold">Sistema Inmobiliario - Panel de Administración</h2>
+      <button id="logoutBtn" class="bg-[#064e40] hover:bg-[#04614a] text-[#7fffd4] font-semibold py-2 px-4 rounded flex items-center">
+        <i class="fas fa-sign-out-alt mr-2"></i> Cerrar sesión
+      </button>
+    </header>
+
+    <main class="flex-grow overflow-auto">
+      <section class="mb-8">
+        <h3 class="text-xl font-semibold mb-4">Agregar / Modificar Propiedad</h3>
+        <form id="propertyForm" class="bg-[#064e40] p-6 rounded-lg shadow-md space-y-6 max-w-4xl">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label for="title" class="block mb-2 font-semibold">Título de la propiedad</label>
+              <input
+                type="text"
+                id="title"
+                name="title"
+                placeholder="Ej: Departamento céntrico 2 ambientes"
+                class="w-full px-4 py-2 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-[#7fffd4]"
+                required
+              />
+            </div>
+            <div>
+              <label for="price" class="block mb-2 font-semibold">Precio (USD)</label>
+              <input
+                type="number"
+                id="price"
+                name="price"
+                placeholder="Ej: 120000"
+                class="w-full px-4 py-2 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-[#7fffd4]"
+                min="0"
+                required
+              />
+            </div>
+            <div>
+              <label for="address" class="block mb-2 font-semibold">Dirección</label>
+              <input
+                type="text"
+                id="address"
+                name="address"
+                placeholder="Ej: Calle Falsa 123, Ciudad"
+                class="w-full px-4 py-2 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-[#7fffd4]"
+                required
+              />
+            </div>
+            <div>
+              <label for="type" class="block mb-2 font-semibold">Tipo de propiedad</label>
+              <select
+                id="type"
+                name="type"
+                class="w-full px-4 py-2 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-[#7fffd4]"
+                required
+              >
+                <option value="" disabled selected>Seleccione tipo</option>
+                <option value="Departamento">Departamento</option>
+                <option value="Casa">Casa</option>
+                <option value="Terreno">Terreno</option>
+                <option value="Local Comercial">Local Comercial</option>
+              </select>
+            </div>
+            <div>
+              <label for="bedrooms" class="block mb-2 font-semibold">Habitaciones</label>
+              <input
+                type="number"
+                id="bedrooms"
+                name="bedrooms"
+                placeholder="Ej: 3"
+                class="w-full px-4 py-2 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-[#7fffd4]"
+                min="0"
+                required
+              />
+            </div>
+            <div>
+              <label for="bathrooms" class="block mb-2 font-semibold">Baños</label>
+              <input
+                type="number"
+                id="bathrooms"
+                name="bathrooms"
+                placeholder="Ej: 2"
+                class="w-full px-4 py-2 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-[#7fffd4]"
+                min="0"
+                required
+              />
+            </div>
+          </div>
+
+          <div>
+            <label for="description" class="block mb-2 font-semibold">Descripción</label>
+            <textarea
+              id="description"
+              name="description"
+              rows="4"
+              placeholder="Descripción detallada de la propiedad"
+              class="w-full px-4 py-2 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-[#7fffd4]"
+              required
+            ></textarea>
+          </div>
+
+          <div>
+            <label for="features" class="block mb-2 font-semibold">Características (separadas por comas)</label>
+            <input
+              type="text"
+              id="features"
+              name="features"
+              placeholder="Ej: Piscina, Jardín, Cochera"
+              class="w-full px-4 py-2 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-[#7fffd4]"
+            />
+          </div>
+
+          <div>
+            <label for="imageUrl" class="block mb-2 font-semibold">URL de imagen</label>
+            <input
+              type="url"
+              id="imageUrl"
+              name="imageUrl"
+              placeholder="https://example.com/imagen.jpg"
+              class="w-full px-4 py-2 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-[#7fffd4]"
+            />
+          </div>
+
+          <div class="flex justify-end">
+            <button
+              type="submit"
+              class="bg-[#7fffd4] text-black font-bold py-3 px-6 rounded-md hover:bg-[#5cc9b1] transition-colors flex items-center"
+            >
+              <i class="fas fa-save mr-2"></i> Guardar Propiedad
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <section>
+        <h3 class="text-xl font-semibold mb-4">Listado de Propiedades</h3>
+        <div id="propertiesList" class="space-y-6 max-w-6xl overflow-auto">
+          <!-- Propiedades se mostrarán aquí -->
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Datos simulados en localStorage para persistencia simple
+    const STORAGE_KEY = "inmobiliaria_properties";
+
+    // Función para obtener propiedades guardadas
+    function getProperties() {
+      const props = localStorage.getItem(STORAGE_KEY);
+      return props ? JSON.parse(props) : [];
+    }
+
+    // Función para guardar propiedades
+    function saveProperties(properties) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(properties));
+    }
+
+    // Renderizar listado de propiedades
+    function renderProperties() {
+      const container = document.getElementById("propertiesList");
+      const properties = getProperties();
+      container.innerHTML = "";
+
+      if (properties.length === 0) {
+        container.innerHTML = `<p class="text-[#7fffd4] font-semibold">No hay propiedades agregadas aún.</p>`;
+        return;
+      }
+
+      properties.forEach((prop, index) => {
+        const featuresList = prop.features.length > 0 ? prop.features.map(f => `<li class="list-disc ml-5">${f.trim()}</li>`).join("") : "<li class='list-disc ml-5'>Sin características</li>";
+        const imageSrc = prop.imageUrl ? prop.imageUrl : "https://placehold.co/600x400/png?text=Sin+Imagen+de+Propiedad";
+        const imageAlt = prop.title ? `Imagen de la propiedad titulada ${prop.title}` : "Imagen de propiedad sin título";
+
+        const card = document.createElement("div");
+        card.className = "bg-[#064e40] rounded-lg shadow-md p-6 flex flex-col md:flex-row gap-6";
+
+        card.innerHTML = `
+          <img src="${imageSrc}" alt="${imageAlt}" class="w-full md:w-64 h-40 object-cover rounded-md flex-shrink-0" />
+          <div class="flex flex-col flex-grow text-[#7fffd4]">
+            <h4 class="text-lg font-bold mb-1">${prop.title}</h4>
+            <p class="mb-1"><span class="font-semibold">Precio:</span> $${prop.price.toLocaleString()}</p>
+            <p class="mb-1"><span class="font-semibold">Dirección:</span> ${prop.address}</p>
+            <p class="mb-1"><span class="font-semibold">Tipo:</span> ${prop.type}</p>
+            <p class="mb-1"><span class="font-semibold">Habitaciones:</span> ${prop.bedrooms}</p>
+            <p class="mb-1"><span class="font-semibold">Baños:</span> ${prop.bathrooms}</p>
+            <p class="mb-1"><span class="font-semibold">Descripción:</span> ${prop.description}</p>
+            <p class="font-semibold">Características:</p>
+            <ul class="mb-4">${featuresList}</ul>
+            <div class="mt-auto flex gap-3">
+              <button data-index="${index}" class="editBtn bg-[#7fffd4] text-black px-4 py-2 rounded hover:bg-[#5cc9b1] flex items-center">
+                <i class="fas fa-edit mr-2"></i> Editar
+              </button>
+              <button data-index="${index}" class="deleteBtn bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded flex items-center">
+                <i class="fas fa-trash-alt mr-2"></i> Eliminar
+              </button>
+            </div>
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+
+      // Añadir eventos a botones editar y eliminar
+      document.querySelectorAll(".editBtn").forEach(btn => {
+        btn.addEventListener("click", e => {
+          const idx = e.currentTarget.getAttribute("data-index");
+          loadPropertyToForm(idx);
+        });
+      });
+
+      document.querySelectorAll(".deleteBtn").forEach(btn => {
+        btn.addEventListener("click", e => {
+          const idx = e.currentTarget.getAttribute("data-index");
+          if (confirm("¿Está seguro que desea eliminar esta propiedad?")) {
+            deleteProperty(idx);
+          }
+        });
+      });
+    }
+
+    // Cargar propiedad en el formulario para editar
+    function loadPropertyToForm(index) {
+      const properties = getProperties();
+      const prop = properties[index];
+      if (!prop) return;
+
+      document.getElementById("title").value = prop.title;
+      document.getElementById("price").value = prop.price;
+      document.getElementById("address").value = prop.address;
+      document.getElementById("type").value = prop.type;
+      document.getElementById("bedrooms").value = prop.bedrooms;
+      document.getElementById("bathrooms").value = prop.bathrooms;
+      document.getElementById("description").value = prop.description;
+      document.getElementById("features").value = prop.features.join(", ");
+      document.getElementById("imageUrl").value = prop.imageUrl || "";
+
+      // Guardar índice en el formulario dataset para saber que es edición
+      propertyForm.dataset.editIndex = index;
+
+      // Cambiar texto botón a "Actualizar Propiedad"
+      propertyForm.querySelector("button[type=submit]").innerHTML = '<i class="fas fa-save mr-2"></i> Actualizar Propiedad';
+
+      // Scroll al formulario
+      propertyForm.scrollIntoView({ behavior: "smooth" });
+    }
+
+    // Eliminar propiedad
+    function deleteProperty(index) {
+      const properties = getProperties();
+      properties.splice(index, 1);
+      saveProperties(properties);
+      renderProperties();
+      resetForm();
+    }
+
+    // Resetear formulario y estado edición
+    function resetForm() {
+      propertyForm.reset();
+      delete propertyForm.dataset.editIndex;
+      propertyForm.querySelector("button[type=submit]").innerHTML = '<i class="fas fa-save mr-2"></i> Guardar Propiedad';
+    }
+
+    // Manejo del formulario de propiedades
+    const propertyForm = document.getElementById("propertyForm");
+    propertyForm.addEventListener("submit", e => {
+      e.preventDefault();
+
+      const newProperty = {
+        title: propertyForm.title.value.trim(),
+        price: Number(propertyForm.price.value),
+        address: propertyForm.address.value.trim(),
+        type: propertyForm.type.value,
+        bedrooms: Number(propertyForm.bedrooms.value),
+        bathrooms: Number(propertyForm.bathrooms.value),
+        description: propertyForm.description.value.trim(),
+        features: propertyForm.features.value ? propertyForm.features.value.split(",").map(f => f.trim()).filter(f => f.length > 0) : [],
+        imageUrl: propertyForm.imageUrl.value.trim()
+      };
+
+      const properties = getProperties();
+
+      if (propertyForm.dataset.editIndex !== undefined) {
+        // Actualizar propiedad existente
+        properties[propertyForm.dataset.editIndex] = newProperty;
+      } else {
+        // Agregar nueva propiedad
+        properties.push(newProperty);
+      }
+
+      saveProperties(properties);
+      renderProperties();
+      resetForm();
+      alert("Propiedad guardada correctamente.");
+    });
+
+    // Manejo login y logout
+    const loginForm = document.getElementById("loginForm");
+    const errorMsg = document.getElementById("errorMsg");
+    const loginPage = document.getElementById("loginPage");
+    const adminPanel = document.getElementById("adminPanel");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    function showAdminPanel() {
+      loginPage.classList.add("hidden");
+      adminPanel.classList.remove("hidden");
+      renderProperties();
+    }
+
+    function showLoginPage() {
+      loginPage.classList.remove("hidden");
+      adminPanel.classList.add("hidden");
+      loginForm.reset();
+      errorMsg.classList.add("hidden");
+    }
+
+    loginForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const username = loginForm.username.value.trim();
+      const password = loginForm.password.value;
+
+      if (username === "Axel12" && password === "1234") {
+        errorMsg.classList.add("hidden");
+        showAdminPanel();
+      } else {
+        errorMsg.textContent = "Usuario o contraseña incorrectos.";
+        errorMsg.classList.remove("hidden");
+      }
+    });
+
+    logoutBtn.addEventListener("click", () => {
+      if (confirm("¿Desea cerrar sesión?")) {
+        showLoginPage();
+        resetForm();
+      }
+    });
+
+    // Al cargar la página, mostrar login
+    showLoginPage();
+  </script>
+</body>
+</html>

@@ -1,0 +1,171 @@
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <title>
+        Propiedades Nievas - Sistema Inmobiliario
+    </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&amp;display=swap" rel="stylesheet" />
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-black text-[#0f766e] min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-black border-b border-[#0f766e] sticky top-0 z-50">
+        <div class="flex flex-col md:flex-row items-center justify-between max-w-7xl mx-auto px-4 py-3">
+            <!-- Logo y Marca -->
+            <div class="flex items-center space-x-3">
+                <img src="logo.png" alt="Propiedades Nievas" class="h-12 w-12 object-contain bg-white rounded-full p-1" />
+                <span class="text-[#0f766e] text-2xl font-bold leading-tight tracking-wide">
+          Propiedades<br><small class="text-[#14b8a6] text-base font-semibold">NIEVAS</small>
+        </span>
+            </div>
+            <!-- Iconos de usuario -->
+            <div class="flex space-x-6 mt-3 md:mt-0">
+                <div class="flex flex-col items-center text-[#0f766e] hover:text-[#14b8a6] cursor-pointer">
+                    <i class="fas fa-user fa-lg"></i>
+                    <span class="text-xs font-semibold">Ingresá</span>
+                </div>
+                <div class="flex flex-col items-center text-[#0f766e] hover:text-[#14b8a6] cursor-pointer">
+                    <i class="fas fa-comment fa-lg"></i>
+                    <span class="text-xs font-semibold">Consultas</span>
+                </div>
+                <div class="flex flex-col items-center text-[#0f766e] hover:text-[#14b8a6] cursor-pointer">
+                    <i class="fas fa-heart fa-lg"></i>
+                    <span class="text-xs font-semibold">Favoritos</span>
+                </div>
+            </div>
+        </div>
+        <!-- Barra de navegación -->
+        <nav class="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between">
+            <!-- Menú móvil -->
+            <div class="flex items-center space-x-2 cursor-pointer text-[#0f766e] hover:text-[#14b8a6] font-semibold md:hidden" id="menu-btn">
+                <i class="fas fa-bars"></i>
+                <span>MENÚ</span>
+            </div>
+            <!-- Links desktop -->
+            <ul class="hidden md:flex space-x-8 text-[#0f766e] font-semibold">
+                <li><a href="index.html" class="hover:text-[#14b8a6] transition-colors">INICIO</a></li>
+                <li><a href="Propiedades.html" class="hover:text-[#14b8a6] transition-colors">PROPIEDADES</a></li>
+                <li><a href="Contactos.html" class="hover:text-[#14b8a6] transition-colors">CONTACTO</a></li>
+            </ul>
+        </nav>
+        <!-- Menú móvil desplegable -->
+        <div class="hidden md:hidden bg-black border-t border-[#0f766e]" id="mobile-menu">
+            <a class="block px-4 py-3 text-[#0f766e] font-semibold hover:bg-[#0f766e] hover:text-black transition-colors duration-300" href="#home">
+        INICIO
+      </a>
+            <a class="block px-4 py-3 text-[#0f766e] font-semibold hover:bg-[#0f766e] hover:text-black transition-colors duration-300" href="#propiedades">
+        PROPIEDADES
+      </a>
+            <a class="block px-4 py-3 text-[#0f766e] font-semibold hover:bg-[#0f766e] hover:text-black transition-colors duration-300" href="#sobrenosotros">
+        EMPRESA
+      </a>
+            <a class="block px-4 py-3 text-[#0f766e] font-semibold hover:bg-[#0f766e] hover:text-black transition-colors duration-300" href="#contacto">
+        CONTACTO
+      </a>
+        </div>
+    </header>
+    <!-- Main content -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <!-- Contacto Section -->
+        <section class="mb-20 max-w-3xl mx-auto text-[#0f766e]" id="contacto">
+            <h2 class="text-3xl font-bold text-[#14b8a6] mb-8 text-center">
+                Contacto - Agenda tu cita
+            </h2>
+            <form class="bg-black border border-[#0f766e] rounded-lg p-8 shadow-lg" id="form-contacto" novalidate="">
+                <div class="mb-6">
+                    <label class="block mb-2 font-semibold" for="nombre">
+       Nombre Completo
+      </label>
+                    <input class="w-full rounded-md bg-black border border-[#0f766e] px-4 py-3 text-[#0f766e] focus:outline-none focus:ring-2 focus:ring-[#14b8a6]" id="nombre" name="nombre" placeholder="Tu nombre completo" required="" type="text" />
+                </div>
+                <div class="mb-6">
+                    <label class="block mb-2 font-semibold" for="email">
+       Correo Electrónico
+      </label>
+                    <input class="w-full rounded-md bg-black border border-[#0f766e] px-4 py-3 text-[#0f766e] focus:outline-none focus:ring-2 focus:ring-[#14b8a6]" id="email" name="email" placeholder="tu@correo.com" required="" type="email" />
+                </div>
+                <div class="mb-6">
+                    <label class="block mb-2 font-semibold" for="telefono">
+       Teléfono
+      </label>
+                    <input class="w-full rounded-md bg-black border border-[#0f766e] px-4 py-3 text-[#0f766e] focus:outline-none focus:ring-2 focus:ring-[#14b8a6]" id="telefono" name="telefono" placeholder="+54 9 11 1234 5678" type="tel" />
+                </div>
+                <div class="mb-6">
+                    <label class="block mb-2 font-semibold" for="fecha">
+       Fecha para la cita
+      </label>
+                    <input class="w-full rounded-md bg-black border border-[#0f766e] px-4 py-3 text-[#0f766e] focus:outline-none focus:ring-2 focus:ring-[#14b8a6]" id="fecha" name="fecha" required="" type="date" />
+                </div>
+                <div class="mb-6">
+                    <label class="block mb-2 font-semibold" for="mensaje">
+       Mensaje / Comentarios
+      </label>
+                    <textarea class="w-full rounded-md bg-black border border-[#0f766e] px-4 py-3 text-[#0f766e] focus:outline-none focus:ring-2 focus:ring-[#14b8a6]" id="mensaje" name="mensaje" placeholder="Escribe aquí cualquier detalle adicional" rows="4"></textarea>
+                </div>
+                <button class="w-full bg-[#14b8a6] hover:bg-[#0f766e] text-black font-bold py-3 rounded-md transition-colors duration-300" type="submit">
+      Enviar
+     </button>
+            </form>
+            <p class="mt-4 text-center font-semibold" id="form-message">
+            </p>
+        </section>
+    </main>
+
+    </main>
+    <!-- Footer -->
+    <footer class="bg-black border-t border-[#0f766e] py-8 text-[#0f766e]">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center md:items-start gap-8">
+            <!-- Logo y privacidad -->
+            <div class="flex flex-col items-center md:items-start mb-6 md:mb-0">
+                <img src="Logo.png" alt="Propiedades Nievas" class="h-14 w-14 object-contain bg-white rounded-full p-1 mb-2" />
+                <p class="font-bold text-lg text-[#14b8a6]">Propiedades Nievas</p>
+                <a href="#" class="text-sm hover:text-[#14b8a6] mt-2 transition-colors">Política de privacidad</a>
+            </div>
+            <!-- Categorías -->
+            <div class="mb-6 md:mb-0">
+                <a class="text-[#14b8a6] font-semibold mb-2" href="Propiedades.html">PROPIEDADES</a>
+                <ul class="space-y-1">
+                    <li><a href="Propiedades.html?tipo=" class="hover:text-[#14b8a6] transition-colors">Todas</a></li>
+                    <li><a href="Propiedades.html?tipo=casa" class="hover:text-[#14b8a6] transition-colors">Casas</a></li>
+                    <li><a href="Propiedades.html?tipo=departamento" class="hover:text-[#14b8a6] transition-colors">Departamentos</a></li>
+                    <li><a href="Propiedades.html?tipo=terreno" class="hover:text-[#14b8a6] transition-colors">Terrenos</a></li>
+                    <li><a href="Propiedades.html?tipo=local" class="hover:text-[#14b8a6] transition-colors">Local Comercial</a></li>
+                </ul>
+            </div>
+            <!-- Mi cuenta -->
+            <div class="mb-6 md:mb-0">
+                <h3 class="text-[#14b8a6] font-semibold mb-2">MI CUENTA</h3>
+                <ul class="space-y-1">
+                    <li><a href="#" class="hover:text-[#14b8a6] transition-colors">Ingresar</a></li>
+                    <li><a href="#" class="hover:text-[#14b8a6] transition-colors">Registrarme</a></li>
+                    <li><a href="#" class="hover:text-[#14b8a6] transition-colors">Favoritos</a></li>
+                </ul>
+            </div>
+            <!-- Contacto -->
+            <div>
+                <a class="text-[#14b8a6] font-semibold mb-2" href="Contactos.html">CONTACTO</a>
+                <ul class="space-y-1 text-sm">
+                    <li><i class="fas fa-phone mr-2"></i>291 4553410 / 4559140</li>
+                    <li><i class="fab fa-whatsapp mr-2"></i>+54 9 291 6485388</li>
+                    <li><i class="fas fa-envelope mr-2"></i>info@propiedadesnievas.com</li>
+                    <li><i class="fas fa-map-marker-alt mr-2"></i>Oficina Nievas, Carhué, Buenos Aires</li>
+                </ul>
+            </div>
+        </div>
+        <p class="mt-8 text-center text-xs text-[#0f766e]">
+            © 2025 Propiedades Nievas. Todos los derechos reservados.
+        </p>
+    </footer>
+
+</body>
+
+</html>

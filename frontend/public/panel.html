@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Panel - Propiedades Nievas</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    body { font-family: 'Montserrat', sans-serif; }
+    label span { display:block; font-size:.85rem; color:#0f766e; margin-bottom:.25rem }
+    input, select, textarea {
+      background:#000; border:1px solid #0f766e; color:#0f766e;
+      border-radius:.5rem; padding:.6rem .8rem;
+    }
+    input::file-selector-button {
+      background:#14b8a6; color:#000; border:0;
+      padding:.35rem .6rem; border-radius:.4rem; cursor:pointer;
+    }
+    .btn { background:#14b8a6; color:#000; padding:.6rem 1rem; border-radius:.55rem; font-weight:600 }
+    .btn:hover{ background:#0f766e; }
+    .btn-sec { background:#111; color:#14b8a6; border:1px solid #0f766e; padding:.55rem .9rem; border-radius:.5rem }
+    .btn-sec:hover{ background:#0f766e22; }
+
+    #btn-volver-nievas{
+      position: fixed;
+      left: 16px; bottom: 16px;
+      padding: 10px 18px;
+      border-radius: 999px; border: none;
+      font-weight: 700;
+      background: #14b8a6; color: #001010;
+      box-shadow: 0 6px 20px rgba(20,184,166,0.3);
+      cursor: pointer;
+      transition: transform .1s ease, box-shadow .2s ease;
+      z-index: 9999;
+    }
+    #btn-volver-nievas:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 8px 22px rgba(20,184,166,0.45);
+    }
+  </style>
+</head>
+
+<body class="bg-black text-[#0f766e] min-h-screen">
+  <header class="sticky top-0 z-40 bg-black/90 backdrop-blur border-b border-[#0f766e]">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+      <h1 class="text-2xl font-bold">Panel de Administración</h1>
+      <a href="Propiedades.html" class="btn-sec"><i class="fas fa-home mr-2"></i>Ir a Propiedades</a>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 py-8 space-y-10">
+
+    <!-- Formulario de carga -->
+    <section class="bg-black border border-[#0f766e] rounded-xl p-6">
+      <h2 class="text-xl font-bold mb-4">Cargar nueva propiedad</h2>
+      <form id="form-prop" class="grid grid-cols-1 md:grid-cols-2 gap-5" enctype="multipart/form-data">
+        <div><label><span>Título</span><input name="titulo" required /></label></div>
+        <div><label><span>Precio</span><input type="number" name="precio" required /></label></div>
+        <div><label><span>Tipo de Cambio</span>
+          <select name="tipoCambio" required><option>USD</option><option>ARS</option><option>Euros</option></select>
+        </label></div>
+        <div><label><span>Tipo de Propiedad</span>
+          <select id="tipoPropiedad" name="tipoPropiedad" required>
+            <option value="Casas">Casas</option>
+            <option value="Departamentos">Departamentos</option>
+            <option value="Campos">Campos</option>
+            <option value="Cocheras">Cocheras</option>
+            <option value="Chalets">Chalets</option>
+          </select>
+        </label></div>
+        <div><label><span>Tipo de operación</span>
+          <select name="tipoOperacion" required>
+            <option value="venta">Venta</option>
+            <option value="alquiler">Alquiler</option>
+            <option value="venta_alquiler">Venta y Alquiler</option>
+          </select>
+        </label></div>
+
+        <div class="md:col-span-2"><label><span>Descripción</span><textarea name="descripcion" rows="3"></textarea></label></div>
+        <div><label><span>Dirección</span><input name="direccion" /></label></div>
+        <div><label><span>Ciudad</span><input name="ciudad" /></label></div>
+        <div><label><span>Provincia</span><input name="provincia" /></label></div>
+        <div><label><span>Localidad</span><input name="localidad" /></label></div>
+        <div><label><span>Dormitorios</span><input type="number" name="dormitorios" min="0" /></label></div>
+        <div><label><span>Baños</span><input type="number" name="bano" min="0" /></label></div>
+        <div><label><span>Sup. total (m²)</span><input type="number" name="suptotal" min="0" /></label></div>
+        <div><label><span>Imagen principal</span><input type="file" name="imagenPrincipal" accept="image/*" /></label></div>
+        <div><label><span>Galería (hasta 15)</span><input type="file" name="galeria" accept="image/*" multiple /></label></div>
+
+        <div class="md:col-span-2 flex items-center gap-3">
+          <button type="submit" class="btn"><i class="fas fa-upload mr-2"></i>Cargar</button>
+          <button type="reset" class="btn-sec"><i class="fas fa-eraser mr-2"></i>Limpiar</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Tabla administración -->
+    <section class="bg-black border border-[#0f766e] rounded-xl p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xl font-bold">Propiedades cargadas</h2>
+        <button id="recargar" class="btn-sec"><i class="fas fa-sync mr-2"></i>Recargar</button>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-sm">
+          <thead class="bg-[#0f766e22] text-[#14b8a6]">
+            <tr>
+              <th class="text-left p-3">Tipo</th>
+              <th class="text-left p-3">Título</th>
+              <th class="text-left p-3">Precio</th>
+              <th class="text-left p-3">Ciudad</th>
+              <th class="text-left p-3">Operación</th>
+              <th class="text-left p-3">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-admin" class="divide-y divide-[#0f766e33]"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal edición -->
+  <div id="modal-edit" class="hidden fixed inset-0 z-50">
+    <div class="absolute inset-0 bg-black/60"></div>
+    <div class="relative bg-black border border-[#0f766e] rounded-xl p-6 w-[95%] max-w-lg mx-auto mt-20">
+      <h3 class="text-lg font-bold mb-4 text-[#14b8a6]">Editar propiedad</h3>
+      <form id="form-edit" class="space-y-4">
+        <input type="hidden" name="tipo">
+        <input type="hidden" name="id">
+        <div><label><span>Título</span><input name="titulo" required /></label></div>
+        <div><label><span>Precio</span><input type="number" name="precio" required /></label></div>
+        <div><label><span>Tipo de operación</span>
+          <select name="tipoOperacion">
+            <option value="venta">Venta</option>
+            <option value="alquiler">Alquiler</option>
+            <option value="venta_alquiler">Venta y Alquiler</option>
+          </select>
+        </label></div>
+        <div><label><span>Descripción</span><textarea name="descripcion" rows="3"></textarea></label></div>
+        <div class="flex justify-end gap-3 pt-3">
+          <button type="submit" class="btn">Guardar</button>
+          <button type="button" id="cancelar-edit" class="btn-sec">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Botón Volver -->
+  <button id="btn-volver-nievas" onclick="if(document.referrer){history.back();}else{window.location.href='index.html';}">← Volver</button>
+
+  <script>
+    const endpointCargaPorTipo = {
+      'Casas': '/CargarCasa',
+      'Departamentos': '/CargarDpto',
+      'Campos': '/CargarCampo',
+      'Cocheras': '/CargarCochera',
+      'Chalets': '/CargarChalet'
+    };
+
+    const endpointsAdmin = [
+      { tipo:'Casas', list:'/api/Casas' },
+      { tipo:'Departamentos', list:'/api/Departamentos' },
+      { tipo:'Campos', list:'/api/Campos' },
+      { tipo:'Cocheras', list:'/api/Cocheras' },
+      { tipo:'Chalets', list:'/api/Chalets' }
+    ];
+
+    document.getElementById('form-prop').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const tipo = fd.get('tipoPropiedad');
+      const url = endpointCargaPorTipo[tipo];
+      if (!url) return alert('Tipo de propiedad no válido');
+
+      try {
+        const res = await fetch(url, { method: 'POST', body: fd });
+        if (!res.ok) throw new Error(await res.text());
+        alert('Propiedad cargada correctamente ✅');
+        e.target.reset();
+        await cargarTabla();
+      } catch (err) {
+        console.error(err);
+        alert('Error al cargar ❌: ' + err.message);
+      }
+    });
+
+    async function cargarTabla() {
+      const tbody = document.getElementById('tabla-admin');
+      tbody.innerHTML = '<tr><td colspan="6" class="p-4 text-center">Cargando...</td></tr>';
+      const rows = [];
+      for (const ep of endpointsAdmin) {
+        const res = await fetch(ep.list);
+        if (!res.ok) continue;
+        const data = await res.json();
+        data.forEach(p => {
+          rows.push(`
+            <tr class="hover:bg-[#0f766e11]">
+              <td class="p-3">${ep.tipo}</td>
+              <td class="p-3">${p.titulo || ''}</td>
+              <td class="p-3">${(p.precio ?? '').toLocaleString('es-AR')}</td>
+              <td class="p-3">${p.ciudad || ''}</td>
+              <td class="p-3">${p.tipoOperacion || '-'}</td>
+              <td class="p-3 space-x-2">
+                <button class="btn-sec" onclick="abrirEditar('${ep.tipo}','${p._id}')"><i class="fas fa-pen mr-1"></i>Editar</button>
+                <button class="btn-sec" onclick="eliminar('${ep.tipo}','${p._id}')"><i class="fas fa-trash mr-1"></i>Eliminar</button>
+              </td>
+            </tr>
+          `);
+        });
+      }
+      tbody.innerHTML = rows.length ? rows.join('') : '<tr><td colspan="6" class="p-4 text-center">No hay propiedades cargadas.</td></tr>';
+    }
+
+    async function abrirEditar(tipo, id) {
+      const res = await fetch(`/api/${tipo}/${id}`);
+      if (!res.ok) return alert('Error al obtener propiedad');
+      const p = await res.json();
+      const modal = document.getElementById('modal-edit');
+      const form = document.getElementById('form-edit');
+      form.tipo.value = tipo;
+      form.id.value = id;
+      form.titulo.value = p.titulo || '';
+      form.precio.value = p.precio || '';
+      form.descripcion.value = p.descripcion || '';
+      form.tipoOperacion.value = p.tipoOperacion || 'venta';
+      modal.classList.remove('hidden');
+    }
+
+    document.getElementById('cancelar-edit').addEventListener('click', () => {
+      document.getElementById('modal-edit').classList.add('hidden');
+    });
+
+    document.getElementById('form-edit').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const f = e.target;
+      const tipo = f.tipo.value;
+      const id = f.id.value;
+      const payload = {
+        titulo: f.titulo.value,
+        precio: Number(f.precio.value),
+        descripcion: f.descripcion.value,
+        tipoOperacion: f.tipoOperacion.value
+      };
+      try {
+        const res = await fetch(`/api/${tipo}/${id}`, {
+          method:'PUT',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify(payload)
+        });
+        if (!res.ok) throw new Error(await res.text());
+        alert('Propiedad actualizada ✅');
+        document.getElementById('modal-edit').classList.add('hidden');
+        await cargarTabla();
+      } catch (e) { alert('Error: ' + e.message); }
+    });
+
+    async function eliminar(tipo, id) {
+      if (!confirm('¿Eliminar esta propiedad?')) return;
+      try {
+        const res = await fetch(`/api/propiedades/${tipo}/${id}`, { method:'DELETE' });
+        if (!res.ok) throw new Error(await res.text());
+        alert('Propiedad eliminada 🗑️');
+        await cargarTabla();
+      } catch (e) { alert('Error: ' + e.message); }
+    }
+
+    document.getElementById('recargar').addEventListener('click', cargarTabla);
+    cargarTabla();
+  </script>
+</body>
+</html>

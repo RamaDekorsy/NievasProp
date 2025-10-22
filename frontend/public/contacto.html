@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Panel Administrativo - Contactos</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root{ --teal:#14b8a6; --teal-dark:#0f766e; --ink:#000; --line:#0f766e; }
+    body{ font-family:'Montserrat',sans-serif; background:#000; color:#0f766e; }
+    .glass{ background:linear-gradient(180deg,#030303,#090a0a); border:1px solid #0f766e33; border-radius:14px; box-shadow:0 8px 28px rgba(20,184,166,.08), inset 0 0 0 1px #0f766e22; }
+    .btn{ background:var(--teal); color:#000; font-weight:700; border-radius:.6rem; padding:.45rem .8rem; }
+    .btn:hover{ background:var(--teal-dark); }
+    .btn-ghost{ background:#0b0b0b; color:var(--teal); border:1px solid #0f766e55; border-radius:.6rem; padding:.45rem .8rem; }
+    .btn-ghost:hover{ background:#0f766e22; }
+    .badge{ background:#0f766e; color:#000; font-weight:800; border-radius:999px; padding:.15rem .55rem; font-size:.75rem; }
+    .badge--pend{ background:#111; color:#9fdcd6; border:1px solid #0f766e55; }
+    table{ width:100%; border-collapse:separate; border-spacing:0; }
+    thead th{ position:sticky; top:0; background:#060606; }
+    th, td{ border-bottom:1px solid #0f766e22; }
+    tr:hover td{ background:#070909; }
+    .thead-cell{ text-align:left; font-weight:700; color:#14b8a6; padding:.8rem; border-bottom:1px solid #0f766e55; }
+    .cell{ padding:.8rem; vertical-align:top; }
+    .toast{ position:fixed; top:16px; right:16px; background:#041110; color:#b7f2ec; border:1px solid #0f766e66; padding:.6rem .9rem; border-radius:.6rem; box-shadow:0 10px 24px rgba(20,184,166,.08); display:none; z-index:60; }
+    /* Modal */
+    .modal-bg{ position:fixed; inset:0; background:rgba(0,0,0,.75); display:none; align-items:center; justify-content:center; z-index:50; }
+    .modal{ width:100%; max-width:680px; background:#050505; border:1px solid #0f766e55; border-radius:14px; padding:1rem; box-shadow:0 10px 30px rgba(20,184,166,.15); }
+    label{ font-weight:600; color:#14b8a6; }
+    textarea{ background:#000; color:#0f766e; border:1px solid #0f766e55; border-radius:.6rem; padding:.7rem .8rem; }
+    textarea:focus{ outline:none; box-shadow:0 0 0 2px #14b8a6aa; }
+  </style>
+<style>
+
+</style>
+
+<style>
+  /* === Mejora visual ligera (no rompe nada existente) === */
+  :root{
+    --brand-teal:#14b8a6;
+    --brand-teal-dark:#0f766e;
+  }
+  .card, .property-card{
+    border-radius:16px !important;
+    border:1px solid rgba(20,184,166,0.35) !important;
+    box-shadow:0 10px 26px rgba(0,0,0,0.28) !important;
+    overflow:hidden;
+  }
+  .card:hover, .property-card:hover{ transform: translateY(-2px); transition: transform .08s ease; }
+  .btn, button, .cta, .filter-btn{
+    border-radius:12px !important;
+    padding:10px 14px !important;
+    border:1px solid rgba(20,184,166,0.3) !important;
+  }
+  .filter-btn{
+    background:var(--brand-teal) !important;
+    color:#001010 !important;
+  }
+  h1,h2{ color:var(--brand-teal) !important; letter-spacing:.4px; }
+  .content-wrap, .container{ max-width:1200px; margin:0 auto; padding:0 16px; }
+</style>
+
+
+<style>
+#btn-volver-nievas{
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: none;
+  font-weight: 700;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background: #14b8a6;
+  color: #001010;
+  box-shadow: 0 6px 20px rgba(20,184,166,0.3);
+  cursor: pointer;
+  transition: transform .1s ease, box-shadow .2s ease;
+}
+#btn-volver-nievas:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 8px 22px rgba(20,184,166,0.45);
+}
+</style>
+
+</head>
+<body class="min-h-screen">
+  <div class="max-w-7xl mx-auto p-6">
+    <header class="mb-6 flex items-center justify-between">
+      <h1 class="text-2xl sm:text-3xl font-extrabold text-[#14b8a6]">Consultas de Clientes</h1>
+      <a href="/index.html" class="btn-ghost">Volver al sitio</a>
+    </header>
+
+    <div class="glass p-4 overflow-x-auto">
+      <table>
+        <thead>
+          <tr>
+            <th class="thead-cell">Nombre</th>
+            <th class="thead-cell">Email</th>
+            <th class="thead-cell">Teléfono</th>
+            <th class="thead-cell">Mensaje</th>
+            <th class="thead-cell">Estado</th>
+            <th class="thead-cell">Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="messagesTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast"></div>
+
+  <!-- Modal para responder -->
+  <div id="modalResponder" class="modal-bg">
+    <div class="modal">
+      <div class="flex items-center justify-between mb-2">
+        <h2 class="text-lg font-bold text-[#14b8a6]">Responder Mensaje</h2>
+        <button id="btnCerrarModal" class="btn-ghost" type="button">Cerrar</button>
+      </div>
+      <form id="formResponder" class="flex flex-col gap-4">
+        <label for="respuestaTexto">Respuesta</label>
+        <textarea id="respuestaTexto" rows="8" placeholder="Escribí tu respuesta aquí..." required></textarea>
+        <div class="flex justify-end gap-2">
+          <button type="button" id="btnCancelar" class="btn-ghost">Cancelar</button>
+          <button type="submit" class="btn">Enviar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // ====== Helpers UI ======
+    const $ = sel => document.querySelector(sel);
+    function toast(msg, ok=true){
+      const t = $('#toast');
+      t.textContent = msg;
+      t.style.display = 'block';
+      t.style.borderColor = ok ? '#0f766e66' : '#a33';
+      setTimeout(()=> t.style.display='none', 2200);
+    }
+
+    // ====== Estado modal ======
+    let mensajeSeleccionadoId = null;
+    function abrirModal(id){
+      mensajeSeleccionadoId = id;
+      $('#respuestaTexto').value = '';
+      $('#modalResponder').style.display = 'flex';
+      $('#respuestaTexto').focus();
+    }
+    function cerrarModal(){
+      mensajeSeleccionadoId = null;
+      $('#modalResponder').style.display = 'none';
+    }
+    $('#btnCerrarModal').addEventListener('click', cerrarModal);
+    $('#btnCancelar').addEventListener('click', cerrarModal);
+
+    // ====== Cargar mensajes (mantiene endpoint y formato) ======
+    async function cargarMensajes(){
+      try{
+        const res = await fetch('http://localhost:3000/api/contacto');
+        if(!res.ok){
+          const text = await res.text();
+          throw new Error(`Error HTTP ${res.status}: ${text}`);
+        }
+        const mensajes = await res.json(); // se espera un arreglo
+
+        const tbody = $('#messagesTable');
+        tbody.innerHTML = '';
+
+        if(!Array.isArray(mensajes) || mensajes.length === 0){
+          tbody.innerHTML = '<tr><td class="cell text-center text-[#9fdcd6]" colspan="6">Sin mensajes</td></tr>';
+          return;
+        }
+
+        mensajes.forEach(msg=>{
+          const id = msg._id || msg.id;
+          const nombre = [msg.nombre, msg.apellido].filter(Boolean).join(' ') || '(Sin nombre)';
+          const email = msg.email || '';
+          const telefono = msg.telefono || '-';
+          const mensaje = msg.mensaje || '';
+          const respondido = !!msg.respondido;
+
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td class="cell font-semibold text-[#aee5df]">${nombre}</td>
+            <td class="cell"><a class="text-[#14b8a6] hover:underline" href="mailto:${email}">${email}</a></td>
+            <td class="cell">${telefono}</td>
+            <td class="cell"><div class="text-[#9fdcd6] whitespace-pre-wrap">${mensaje}</div></td>
+            <td class="cell">
+              ${respondido ? '<span class="badge">Respondido</span>' : '<span class="badge badge--pend">Pendiente</span>'}
+            </td>
+            <td class="cell">
+              ${respondido ? '' : `<button class="btn btnResponder" data-id="${id}">Responder</button>`}
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }catch(err){
+        console.error('Error al cargar mensajes:', err);
+        const tbody = $('#messagesTable');
+        tbody.innerHTML = `<tr><td class="cell text-red-400 text-center" colspan="6">Error al cargar: ${err.message}</td></tr>`;
+      }
+    }
+
+    // Delegación para botón Responder
+    $('#messagesTable').addEventListener('click', (e)=>{
+      const btn = e.target.closest('.btnResponder');
+      if(!btn) return;
+      const id = btn.getAttribute('data-id');
+      if(!id) return toast('ID de mensaje inválido', false);
+      abrirModal(id);
+    });
+
+    // Enviar respuesta (mantiene POST a tu endpoint)
+    $('#formResponder').addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const respuesta = $('#respuestaTexto').value.trim();
+      if(!respuesta) return toast('Escribí una respuesta', false);
+      if(!mensajeSeleccionadoId) return toast('No hay mensaje seleccionado', false);
+
+      try{
+        const res = await fetch(`http://localhost:3000/api/contacto/${mensajeSeleccionadoId}/responder`, {
+          method:'POST',
+          headers:{ 'Content-Type':'application/json' },
+          body: JSON.stringify({ respuesta })
+        });
+        if(!res.ok){
+          const text = await res.text().catch(()=> '');
+          throw new Error(`HTTP ${res.status} ${text}`);
+        }
+        toast('Respuesta enviada correctamente ✅');
+        cerrarModal();
+        cargarMensajes();
+      }catch(err){
+        console.error('Error al responder:', err);
+        toast('No se pudo enviar la respuesta', false);
+      }
+    });
+
+    // Go
+    document.addEventListener('DOMContentLoaded', cargarMensajes);
+  </script>
+
+<!-- == Botón Volver (Nievas) == -->
+<button id="btn-volver-nievas" onclick="if(document.referrer){history.back();}else{window.location.href='index.html';}">← Volver</button>
+<script>
+  (function(){
+    try{
+      // Colores de la inmobiliaria (tonos azul/gris); puede ajustarse si ya tenés variables CSS
+      var btn = document.getElementById('btn-volver-nievas');
+      if(btn){
+        btn.style.background = '#1e293b';   // gris azulado
+        btn.style.color = '#ffffff';
+      }
+    }catch(e){}
+  })();
+</script>
+
+
+<!-- Modal Admin Único -->
+<div id="modal-admin" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 hidden">
+  <div class="bg-black border border-[#0f766e] rounded-lg shadow-lg w-full max-w-md p-8 relative">
+    <button id="close-modal-admin" class="absolute top-3 right-3 text-[#14b8a6] hover:text-[#0f766e] text-xl font-bold">&times;</button>
+    <h2 class="mb-6 text-center font-bold text-[#14b8a6] text-xl">Acceso de Administrador</h2>
+    <form id="form-admin-only" class="space-y-5">
+      <div>
+        <label class="block mb-1 font-semibold" for="admin-nombre">Nombre</label>
+        <input class="w-full rounded-md bg-black border border-[#0f766e] px-4 py-2 text-[#0f766e] focus:outline-none focus:ring-2 focus:ring-[#14b8a6]" id="admin-nombre" type="text" required>
+      </div>
+      <div>
+        <label class="block mb-1 font-semibold" for="admin-pass">Contraseña</label>
+        <input class="w-full rounded-md bg-black border border-[#0f766e] px-4 py-2 text-[#0f766e] focus:outline-none focus:ring-2 focus:ring-[#14b8a6]" id="admin-pass" type="password" required>
+      </div>
+      <button type="submit" class="w-full bg-[#14b8a6] hover:bg-[#0f766e] text-black font-bold py-2 rounded-md transition-colors duration-300">
+        Ingresar
+      </button>
+    </form>
+    <p id="admin-only-message" class="mt-4 text-center font-semibold"></p>
+  </div>
+</div>
+<script>
+(function(){
+  // Abrir modal al hacer click en el icono/texto "Admin"
+  document.querySelectorAll('.fa-user, .text-xs.font-semibold').forEach(function(el){
+    el.addEventListener('click', function(e){
+      if (e.target.textContent && e.target.textContent.trim() === 'Admin' || e.target.classList.contains('fa-user')) {
+        var m = document.getElementById('modal-admin');
+        if(m){ m.classList.remove('hidden'); }
+      }
+    });
+  });
+  var closeBtn = document.getElementById('close-modal-admin');
+  if (closeBtn){
+    closeBtn.onclick = function(){ document.getElementById('modal-admin').classList.add('hidden'); };
+  }
+  var form = document.getElementById('form-admin-only');
+  if(form){
+    form.onsubmit = function(e){
+      e.preventDefault();
+      var user = document.getElementById('admin-nombre').value.trim();
+      var pass = document.getElementById('admin-pass').value.trim();
+      if(user === 'admin' && pass === 'admin'){
+        window.location.href = 'menu_admin.html';
+      }else{
+        var msg = document.getElementById('admin-only-message');
+        if(msg){ msg.textContent = 'Credenciales incorrectas'; msg.className = 'mt-4 text-center font-semibold text-red-500'; }
+      }
+    }
+  }
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <title>Detalle de Propiedad - Propiedades Nievas</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root{
+      --teal:#14b8a6;
+      --teal-dark:#0f766e;
+      --ink:#000;
+      --ink-2:#0b0b0b;
+      --line:#0f766e;
+      --line-soft:#0f766e33;
+      --text:#89dad3;
+    }
+    body { font-family:'Montserrat', sans-serif; }
+    .chip { background:var(--teal-dark); color:#000; padding:.25rem .5rem; border-radius:999px; font-size:.75rem; }
+    .kv { display:grid; grid-template-columns:1fr 1fr; gap:.5rem .75rem }
+    .kv b { color:var(--teal) }
+    /* Galería */
+    .gallery img { width:100%; height:420px; object-fit:cover; border-radius:12px; border:1px solid var(--line); background:var(--ink-2) }
+    .thumbs { display:flex; gap:.5rem; overflow-x:auto; padding:.25rem }
+    .thumbs img { width:80px; height:64px; object-fit:cover; border-radius:.5rem; border:1px solid #0f766e55; cursor:pointer }
+    .thumbs img.active { outline:2px solid var(--teal); border-color:var(--teal) }
+    .btn { background:var(--teal); color:#000; padding:.6rem 1rem; border-radius:.55rem; font-weight:600 }
+    .btn:hover { background:var(--teal-dark) }
+    .btn-sec { background:#111; color:var(--teal); border:1px solid var(--line); padding:.55rem .9rem; border-radius:.5rem }
+    .btn-sec:hover { background:#0f766e22 }
+
+    /* ===== MAPA (Google Maps Embed) ===== */
+    #map-wrap h3{ color:var(--teal); }
+    .map-frame{
+      border-radius:16px;
+      border:1px solid var(--line);
+      box-shadow:0 8px 28px rgba(20,184,166,.10), inset 0 0 0 1px #0f766e55;
+      background:linear-gradient(180deg,#020202,#040505);
+      padding:10px;
+    }
+    #gmap-iframe{
+      width:100%;
+      height:380px;
+      border:0;
+      border-radius:12px;
+      overflow:hidden;
+    }
+    .osm-link{ color:var(--teal); font-size:.875rem; }
+    .osm-link:hover{ text-decoration:underline; }
+  </style>
+<style>
+
+</style>
+
+<style>
+  /* === Mejora visual ligera (no rompe nada existente) === */
+  :root{
+    --brand-teal:#14b8a6;
+    --brand-teal-dark:#0f766e;
+  }
+  .card, .property-card{
+    border-radius:16px !important;
+    border:1px solid rgba(20,184,166,0.35) !important;
+    box-shadow:0 10px 26px rgba(0,0,0,0.28) !important;
+    overflow:hidden;
+  }
+  .card:hover, .property-card:hover{ transform: translateY(-2px); transition: transform .08s ease; }
+  .btn, button, .cta, .filter-btn{
+    border-radius:12px !important;
+    padding:10px 14px !important;
+    border:1px solid rgba(20,184,166,0.3) !important;
+  }
+  .filter-btn{
+    background:var(--brand-teal) !important;
+    color:#001010 !important;
+  }
+  h1,h2{ color:var(--brand-teal) !important; letter-spacing:.4px; }
+  .content-wrap, .container{ max-width:1200px; margin:0 auto; padding:0 16px; }
+</style>
+
+
+<style>
+#btn-volver-nievas{
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: none;
+  font-weight: 700;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background: #14b8a6;
+  color: #001010;
+  box-shadow: 0 6px 20px rgba(20,184,166,0.3);
+  cursor: pointer;
+  transition: transform .1s ease, box-shadow .2s ease;
+}
+#btn-volver-nievas:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 8px 22px rgba(20,184,166,0.45);
+}
+</style>
+
+</head>
+
+<body class="bg-black text-[#0f766e] min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="bg-black border-b border-[#0f766e] sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <img src="logo.png" alt="Propiedades Nievas" class="h-10 w-10 object-contain bg-white rounded-full p-1" />
+        <div class="text-xl font-bold leading-tight">
+          Propiedades <span class="text-[#14b8a6]">NIEVAS</span>
+        </div>
+      </div>
+      <nav class="hidden md:flex gap-8 font-semibold">
+        <a href="index.html" class="hover:text-[#14b8a6]">INICIO</a>
+        <a href="Propiedades.html" class="hover:text-[#14b8a6]">PROPIEDADES</a> </nav>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="flex-grow">
+    <div class="max-w-7xl mx-auto px-4 py-6">
+      <a href="Propiedades.html" class="btn-sec inline-flex items-center gap-2 mb-6">
+        <i class="fas fa-arrow-left"></i> Volver a Propiedades
+      </a>
+
+      <div id="cargando" class="text-center py-10">Cargando propiedad...</div>
+
+      <section id="detalle" class="hidden grid grid-cols-1 lg:grid-cols-5 gap-6">
+        <!-- Galería -->
+        <div class="lg:col-span-3 space-y-3">
+          <div class="relative gallery">
+            <img id="img-principal" src="/img/no-image.png" alt="Imagen de la propiedad" onerror="this.src='/img/no-image.png'">
+            <button id="prev" class="absolute left-2 top-1/2 -translate-y-1/2 btn-sec"><i class="fas fa-chevron-left"></i></button>
+            <button id="next" class="absolute right-2 top-1/2 -translate-y-1/2 btn-sec"><i class="fas fa-chevron-right"></i></button>
+            <div class="absolute bottom-2 right-2 chip" id="contador">1 / 1</div>
+          </div>
+          <div class="thumbs" id="thumbs"></div>
+
+          <!-- Mapa (solo si hay dirección) -->
+          <div id="map-wrap" class="space-y-3 hidden">
+            <div class="flex items-center justify-between">
+              <h3 class="text-lg font-semibold">Ubicación</h3>
+              <span class="text-xs px-2 py-1 rounded border border-[#1c1c1c] bg-[#0a0a0a] text-[color:var(--teal)]">Google Maps</span>
+            </div>
+            <div class="map-frame">
+              <iframe id="gmap-iframe"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                allowfullscreen>
+              </iframe>
+            </div>
+            <div class="flex items-center justify-between">
+              <div class="text-xs text-[color:var(--text)]">La ubicación es aproximada según la dirección informada.</div>
+              <a id="gmap-link" class="osm-link" href="#" target="_blank" rel="noopener">
+                Ver en Google Maps <i class="fas fa-external-link-alt ml-1 text-xs"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Info -->
+        <div class="lg:col-span-2 space-y-4">
+          <div class="flex items-start justify-between">
+            <h1 id="titulo" class="text-2xl font-bold text-[#14b8a6]">Propiedad</h1>
+            <span id="chip-tipo" class="chip">Tipo</span>
+          </div>
+
+          <div class="text-2xl font-bold text-[#14b8a6]" id="precio">—</div>
+          <div class="text-sm text-[#89dad3]" id="direccion">—</div>
+
+          <div class="flex gap-3 pt-3">
+            <a id="btn-whatsapp" href="#" class="btn inline-flex items-center gap-2">
+              <i class="fab fa-whatsapp"></i> Consultar por WhatsApp
+            </a>
+            <button id="btn-copiar" class="btn-sec inline-flex items-center gap-2" title="Copiar enlace">
+            <a id="btn-mail" href="#" class="btn inline-flex items-center gap-2" title="Consultar por Mail">
+              <i class="fas fa-envelope"></i> Consultar por Mail
+            </a>
+            <button id="btn-copiar"
+              <i class="fas fa-link"></i> Copiar enlace
+            </button>
+          </div>
+
+          <hr class="border-[#0f766e33]">
+
+          <!-- Características principales -->
+          <div class="kv" id="kv-principales"></div>
+
+          <!-- Descripción -->
+          <div>
+            <h3 class="text-lg font-semibold text-[#14b8a6] mb-1">Descripción</h3>
+            <p id="descripcion" class="text-[#aee5df]"></p>
+          </div>
+
+          <!-- Características (texto libre) -->
+          <div id="caracteristicas-wrap" class="hidden">
+            <h3 class="text-lg font-semibold text-[#14b8a6] mb-1">Características</h3>
+            <p id="caracteristicas" class="text-[#aee5df]"></p>
+          </div>
+        </div>
+      </section>
+
+      <div id="error" class="hidden text-center text-red-400 py-10">No se pudo cargar la propiedad.</div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-black border-t border-[#0f766e] py-6 text-center text-[#0f766e]">
+    <p>© 2025 Propiedades Nievas. Todos los derechos reservados.</p>
+  </footer>
+
+  <script>
+    /* =================== CONFIG WHATSAPP =================== */
+    const COMPANY_WHATSAPP = '291 537 5786'; 
+    const COMPANY_NAME = 'Propiedades Nievas';
+    const COMPANY_WEBSITE = 'https://propiedadesnievas.com';
+
+    /* =================== UTILIDADES =================== */
+    function getQueryParam(name){ return new URLSearchParams(window.location.search).get(name); }
+    function formatearPrecio(valor, tipoCambio){
+      const base = (valor ?? 0).toLocaleString('es-AR');
+      return (tipoCambio ? tipoCambio+' ' : '') + (valor ? base : 'Consultar');
+    }
+    function setIf(label, value){
+      if (value===undefined || value===null || value==='' || value===0) return '';
+      return `<div><b>${label}:</b> ${value}</div>`;
+    }
+    function singular(tipoPlural){
+      const map = { 'Casas':'Casa', 'Departamentos':'Departamento', 'Campos':'Campo', 'Cocheras':'Cochera', 'Chalets':'Chalet' };
+      return map[tipoPlural] || 'Propiedad';
+    }
+
+    // ====== WhatsApp: abrir APP de escritorio con fallback ======
+    function isDesktop(){
+      return !/Android|iPhone|iPad|iPod|Opera Mini|IEMobile/i.test(navigator.userAgent);
+    }
+    function sanitizePhone(num){
+      if (!num) return '';
+      return String(num).replace(/[^\d]/g, '');
+    }
+    function buildWAUrls(texto){
+      const phone = sanitizePhone(COMPANY_WHATSAPP);
+      const msg = encodeURIComponent(texto).replace(/%0A/g, '%0A');
+
+      const scheme = phone
+        ? `whatsapp://send?phone=${phone}&text=${msg}`
+        : `whatsapp://send?text=${msg}`;
+
+      const desktopWeb = phone
+        ? `https://web.whatsapp.com/send?phone=${phone}&text=${msg}`
+        : `https://web.whatsapp.com/send?text=${msg}`;
+
+      const mobileWeb = phone
+        ? `https://api.whatsapp.com/send?phone=${phone}&text=${msg}`
+        : `https://api.whatsapp.com/send?text=${msg}`;
+
+      return { scheme, desktopWeb, mobileWeb };
+    }
+    function openWhatsAppWithFallback(texto){
+      const { scheme, desktopWeb, mobileWeb } = buildWAUrls(texto);
+      const isDesk = isDesktop();
+
+      const fallback = () => {
+        if (isDesk) {
+          window.open(desktopWeb, '_blank', 'noopener');
+        } else {
+          window.location.href = mobileWeb;
+        }
+      };
+
+      window.location.href = scheme;
+      setTimeout(fallback, 1200);
+    }
+
+    /* =================== GALERÍA =================== */
+    const galeria = { total:1, index:0, tipo:'', id:'', urls:[] };
+    async function probarImagen(url){
+      try{ const res = await fetch(url); if (!res.ok) throw 0; return true; } catch{ return false; }
+    }
+    async function construirGaleria(tipo, id, max=15){
+      const base = `/imagen/${tipo}/${id}`;
+      const okP = await probarImagen(base);
+      const urls = [];
+      if (okP) urls.push(base);
+      for (let i=0;i<max;i++){
+        const u = `${base}?index=${i}`;
+        const ok = await probarImagen(u);
+        if (ok) urls.push(u); else break;
+      }
+      if (!urls.length) urls.push('/img/no-image.png');
+      Object.assign(galeria,{tipo,id,urls,total:urls.length,index:0});
+      pintarGaleria();
+    }
+    function pintarGaleria(){
+      const img = document.getElementById('img-principal');
+      const contador = document.getElementById('contador');
+      const thumbs = document.getElementById('thumbs');
+      img.src = galeria.urls[galeria.index];
+      contador.textContent = `${galeria.index+1} / ${galeria.total}`;
+      thumbs.innerHTML = galeria.urls.map((u,i)=>`<img src="${u}" data-i="${i}" class="${i===galeria.index?'active':''}" onerror="this.src='/img/no-image.png'">`).join('');
+      thumbs.querySelectorAll('img').forEach(el=>{
+        el.addEventListener('click',()=>{ galeria.index=parseInt(el.dataset.i,10); pintarGaleria(); });
+      });
+    }
+    document.getElementById('prev').addEventListener('click',()=>{ galeria.index=(galeria.index-1+galeria.total)%galeria.total; pintarGaleria(); });
+    document.getElementById('next').addEventListener('click',()=>{ galeria.index=(galeria.index+1)%galeria.total; pintarGaleria(); });
+
+    /* =================== CARGA DE DETALLE =================== */
+    function setGoogleMap(address){
+      // Construye URLs para embed y para abrir en Maps
+      const q = encodeURIComponent(address);
+      const embedUrl = `https://www.google.com/maps?q=${q}&output=embed`;
+      const linkUrl  = `https://www.google.com/maps?q=${q}`;
+
+      const wrap = document.getElementById('map-wrap');
+      const iframe = document.getElementById('gmap-iframe');
+      const link = document.getElementById('gmap-link');
+
+      iframe.src = embedUrl;
+      link.href = linkUrl;
+      wrap.classList.remove('hidden');
+    }
+
+    async function cargarDetalle(){
+      const tipo = getQueryParam('tipo'); // Casas / Departamentos / Campos / Cocheras / Chalets
+      const id = getQueryParam('id');
+      const cargando = document.getElementById('cargando');
+      const detalle = document.getElementById('detalle');
+      const error = document.getElementById('error');
+
+      if (!tipo || !id){ cargando.classList.add('hidden'); error.classList.remove('hidden'); return; }
+
+      try{
+        const res = await fetch(`/api/${tipo}/${id}`);
+        if (!res.ok) throw new Error('No se encontró la propiedad');
+        const p = await res.json();
+
+        const tipoSing = singular(tipo);
+        document.getElementById('titulo').textContent = p.titulo || '(Sin título)';
+        document.getElementById('chip-tipo').textContent = tipoSing;
+        document.getElementById('precio').textContent = formatearPrecio(p.precio, p.tipoCambio);
+
+        const dir = [p.direccion, p.localidad, p.ciudad, p.provincia].filter(Boolean).join(', ').trim();
+        document.getElementById('direccion').textContent = dir || '—';
+
+        // Descripción / Características
+        document.getElementById('descripcion').textContent = p.descripcion || '—';
+        if (p.caracteristicas && String(p.caracteristicas).trim()!==''){
+          document.getElementById('caracteristicas').textContent = p.caracteristicas;
+          document.getElementById('caracteristicas-wrap').classList.remove('hidden');
+        }
+
+        // KV
+        const kv = [];
+        kv.push(setIf('Estado', p.estado));
+        kv.push(setIf('Sup. cubierta (m²)', p.supcubierta));
+        kv.push(setIf('Sup. total (m²)', p.suptotal));
+        kv.push(setIf('Sup. terreno (m²)', p.supterreno));
+        kv.push(setIf('Dormitorios', p.dormitorios));
+        kv.push(setIf('Ambientes', p.ambientes));
+        kv.push(setIf('Baños', p.bano));
+        kv.push(setIf('Antigüedad', p.aconstruccion));
+        kv.push(setIf('Cochera', p.cochera));
+        kv.push(setIf('Tipo de cochera', p.tipocochera));
+        kv.push(setIf('Orientación/Disposición', p.orientacion || p.disposicion));
+        kv.push(setIf('Tipo de cambio', p.tipoCambio));
+        if (tipo==='Departamentos'){ kv.push(setIf('Expensas', p.expensas)); kv.push(setIf('Piso', p.piso)); }
+        if (tipo==='Campos'){ kv.push(setIf('Tipo de terreno', p.tipoTerreno)); }
+        if (tipo==='Cocheras'){ kv.push(setIf('Tipo de acceso', p.tipoAcceso)); }
+        document.getElementById('kv-principales').innerHTML = kv.filter(Boolean).join('');
+
+        // Galería
+        await construirGaleria(tipo, id);
+
+        // WhatsApp -> abrir app con fallback
+        const linkActual = window.location.href;
+        const precioTxt = formatearPrecio(p.precio, p.tipoCambio);
+        const msg = `Hola, me interesa esta ${tipoSing}:\n• ${p.titulo || '(Sin título)'}\n• Precio: ${precioTxt}\n• Dirección: ${dir || 'No informada'}\n• Link: ${linkActual}\n¿Podrían brindarme más información?`;
+        document.getElementById('btn-whatsapp').addEventListener('click', (ev) => {
+          ev.preventDefault();
+          openWhatsAppWithFallback(msg);
+        });
+
+        // Copiar enlace
+        document.getElementById('btn-copiar').addEventListener('click', async ()=>{
+          try{
+            await navigator.clipboard.writeText(linkActual);
+            const btn = document.getElementById('btn-copiar');
+            const old = btn.innerHTML; btn.innerHTML = '<i class="fas fa-check"></i> ¡Copiado!';
+            setTimeout(()=> btn.innerHTML = old, 1400);
+          }catch{ alert('No se pudo copiar el enlace.'); }
+        });
+
+        // Mapa (mostrar SOLO si hay dirección)
+        if (dir && dir.length > 0){
+          setGoogleMap(dir);
+        } else {
+          // deja oculto el map-wrap (hidden por defecto)
+        }
+
+        cargando.classList.add('hidden');
+        detalle.classList.remove('hidden');
+      } catch(e){
+        console.error(e);
+        cargando.classList.add('hidden');
+        error.classList.remove('hidden');
+      }
+    }
+
+    // Go
+    cargarDetalle();
+  </script>
+
+<!-- == Botón Volver (Nievas) == -->
+<button id="btn-volver-nievas" onclick="if(document.referrer){history.back();}else{window.location.href='index.html';}">← Volver</button>
+<script>
+  (function(){
+    try{
+      // Colores de la inmobiliaria (tonos azul/gris); puede ajustarse si ya tenés variables CSS
+      var btn = document.getElementById('btn-volver-nievas');
+      if(btn){
+        btn.style.background = '#1e293b';   // gris azulado
+        btn.style.color = '#ffffff';
+      }
+    }catch(e){}
+  })();
+</script>
+
+
+<script>
+(function(){
+  function sel(q){ return document.querySelector(q); }
+  function txt(el){ return (el && el.textContent || '').trim(); }
+  function makeMsg(nombre, codigo){
+    var m = 'Hola, me interesa la propiedad "' + (nombre||'Propiedad') + '"';
+    if (codigo) m += ' (código: ' + codigo + ')';
+    m += '. La vi en su página y quisiera más información. ¡Gracias!';
+    return m;
+  }
+  function buildUrl(){
+    var nombre = txt(sel('#titulo')) || txt(sel('h1[data-nombre]')) || txt(sel('[data-nombre]'));
+    var codigo = txt(sel('#codigo')) || (sel('[data-codigo]') && sel('[data-codigo]').getAttribute('data-codigo')) || '';
+    var url = '/Contactos.html?mensaje=' + encodeURIComponent(makeMsg(nombre, codigo))
+            + '&propiedad=' + encodeURIComponent(nombre||'')
+            + '&codigo=' + encodeURIComponent(codigo||'');
+    return url;
+  }
+  function onClick(e){
+    e.preventDefault();
+    window.location.href = buildUrl();
+  }
+  document.addEventListener('DOMContentLoaded', function(){
+    var mailBtn = document.getElementById('btn-mail');
+    if (mailBtn) mailBtn.addEventListener('click', onClick);
+  });
+})();
+</script>
+
+</body>
+</html>
